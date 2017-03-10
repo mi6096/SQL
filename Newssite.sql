@@ -1,0 +1,63 @@
+DROP DATABASE IF EXISTS newssite;
+CREATE DATABASE newssite;
+USE newssite;
+
+CREATE TABLE news(
+id INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
+article VARCHAR(255) NOT NULL,
+contain TEXT NOT NULL,
+category_id INT NOT NULL,
+CONSTRAINT FOREIGN KEY (category_id) REFERENCES categories(id)
+);
+
+CREATE TABLE categories(
+id INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
+name VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE users(
+id INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
+username VARCHAR(255) UNIQUE NOT NULL,
+password VARCHAR(255) NOT NULL,
+email VARCHAR(255) NOT NULL,
+role_id INT NOT NULL,
+CONSTRAINT FOREIGN KEY (role_id) REFERENCES role(id)
+);
+
+CREATE TABLE role(
+id INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
+type VARCHAR(50) NOT NULL
+);
+
+
+CREATE TABLE coments(
+id INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
+contain VARCHAR(255),
+users_id INT NOT NULL,
+news_id INT NOT NULL,
+CONSTRAINT FOREIGN KEY (users_id) REFERENCES users(id),
+CONSTRAINT FOREIGN KEY (news_id) REFERENCES news(id)
+);
+
+CREATE TABLE pictures(
+id INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
+image BLOB NOT NULL,
+news_id INT NOT NULL,
+CONSTRAINT FOREIGN KEY (news_id) REFERENCES news(id)
+);
+
+
+SELECT article.news,image.pictures
+FROM news JOIN pictures ON news.id=pictures.news_id
+ORDER BY id DESC
+LIMIT 20;
+
+SELECT article.news,image.pictures
+FROM news JOIN categories
+WHERE category_id=categories.category_id;
+
+SELECT * FROM news
+ORDER BY id;
+
+
+
